@@ -1,0 +1,12 @@
+### JSONPlaceholder
+GET https://jsonplaceholder.typicode.com/posts
+
+### 
+GET localhost:3000/api/hello
+
+###
+GET localhost:3000/api/hello2
+
+###
+GET http://localhost:3000/api/hello
+GET http://localhost:3000/api/hello2

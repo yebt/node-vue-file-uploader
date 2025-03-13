@@ -1,0 +1,12 @@
+# Base url
+@host = http://localhost:3000
+
+### Home call
+
+GET {{host}}
+
+
+### 
+# Api files
+GET {{host}}/api/hello
+
