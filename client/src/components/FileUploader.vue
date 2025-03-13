@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
-import {formatFileSize} from '@/Utils/format'
+import {formatFileSize} from '@/utils/format'
 
 const selectedFile: Ref<File | null> = ref(null) // File selected
 const fileInput = ref(null)
