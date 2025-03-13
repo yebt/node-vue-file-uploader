@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, type Ref } from 'vue'
-import { formatFileSize } from './Utils/format'
+import { formatFileSize } from './utils/format'
 
 import type { ApiFile } from './types/apiFiles'
 import FileUploader from './components/FileUploader.vue'
@@ -12,7 +12,8 @@ const fetchFiles = async () => {
   try {
     const response = await fetch(`${apiUrl.value}/api/files/list`)
     const data = await response.json()
-    files.value = data
+    console.log(data)
+    files.value = data.files
   } catch (error) {
     console.log(`Error fetchng files: ${error}`)
   }
