@@ -4,16 +4,16 @@ import { formatFileSize } from './utils/format'
 
 import type { ApiFile } from './types/apiFiles'
 import FileUploader from './components/FileUploader.vue'
+import { API_URL } from './services/files'
 
 const files: Ref<ApiFile[]> = ref([])
-const apiUrl = ref(`http://${window.location.hostname}:3000`)
+const apiUrl = API_URL
 
 const fetchFiles = async () => {
   try {
-    const response = await fetch(`${apiUrl.value}/api/files/list`)
+    const response = await fetch(`${apiUrl}/api/files/list`)
     const data = await response.json()
-    console.log(data)
-    files.value = data.files
+    files.value = data
   } catch (error) {
     console.log(`Error fetchng files: ${error}`)
   }
@@ -28,26 +28,47 @@ onMounted(() => {
 <template>
   <section class="min-h-screen bg-gray-100 p-2">
     <div class="container mx-auto px-4 py-8">
-      <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">Share Files LAN</h1>
+      <h1 class="mb-8 text-center text-3xl font-bold text-gray-800">Share Files LAN</h1>
     </div>
-    <FileUploader />
+    <FileUploader @file-uploaded="fetchFiles"/>
 
     <div class="mt-12">
-      <h2 class="text-xl font-semibold mb-4 text-gray-700">Archivos Disponibles</h2>
+      <div class="flex justify-between">
+        <h2 class="mb-4 text-xl font-semibold text-gray-700">Archivos Disponibles</h2>
+        <button
+          @click="fetchFiles"
+          class="me-2 mb-2 flex rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 focus:outline-none"
+        >
+          <span>Actualizar</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            class="ms-2 h-3 text-blue-800 flex justify-center items-center m-auto stroke-2"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+            />
+          </svg>
+        </button>
+      </div>
       <div v-if="files.length === 0" class="text-center text-gray-500">
         No hay archivos disponibles para descargar.
       </div>
-      <div v-else class="bg-white rounded-lg shadow overflow-hidden">
+      <div v-else class="overflow-hidden rounded-lg bg-white shadow">
         <ul class="divide-y divide-gray-200">
           <li
             v-for="file in files"
             :key="file.id"
-            class="p-4 flex justify-between items-center hover:bg-gray-50"
+            class="flex items-center justify-between p-4 hover:bg-gray-50 flex-wrap"
           >
             <div class="flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 text-blue-500 mr-3"
+                class="mr-3 h-6 w-6 text-blue-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -63,8 +84,8 @@ onMounted(() => {
               <span class="ml-2 text-sm text-gray-500">{{ formatFileSize(file.size) }}</span>
             </div>
             <a
-              :href="`${apiUrl}/download/${file.id}`"
-              class="text-blue-600 hover:text-blue-800 font-medium"
+              :href="`${apiUrl}/api/files/download/${file.id}`"
+              class="font-medium text-blue-600 hover:text-blue-800"
               download
             >
               Descargar

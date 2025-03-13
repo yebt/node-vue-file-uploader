@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
 import {formatFileSize} from '@/utils/format'
+import { API_URL } from '@/services/files'
+
+const emit = defineEmits(['file-uploaded'])
 
 const selectedFile: Ref<File | null> = ref(null) // File selected
 const fileInput = ref(null)
@@ -52,6 +55,7 @@ const uploadFile = async () => {
         selectedFile.value = null
         // Dispatch event to update the file list
         window.dispatchEvent(new CustomEvent('file-uploaded'))
+        emit('file-uploaded')
       } else {
         uploadError.value = 'Error to try upload file. please try again'
       }
@@ -63,7 +67,7 @@ const uploadFile = async () => {
       isUploading.value = false
     }
 
-    const apiURL = `http://${window.location.hostname}:3000`
+    const apiURL = API_URL
     xhr.open('POST', `${apiURL}/api/files/upload`, true)
     xhr.send(formData)
   } catch (error) {
