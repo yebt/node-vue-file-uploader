@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
+import {formatFileSize} from '@/Utils/format'
 
 const selectedFile: Ref<File | null> = ref(null) // File selected
 const fileInput = ref(null)
@@ -25,13 +26,6 @@ const onDrop = (event: DragEvent) => {
   }
 }
 
-const formatFileSize = (bytes: number): string => {
-  if (bytes === 0) return '0 Bytes'
-  const k = 1024
-  const sizes = ['Bytes', 'KB', 'MB', 'GB']
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`
-}
 
 const uploadFile = async () => {
   if (!selectedFile.value) return
